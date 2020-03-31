@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizzler/quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 QuizBrain quizBrain = QuizBrain();
 
@@ -29,17 +30,52 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
+  int totalRightAnswer = 0;
 
   void checkAnswer(bool userPickedAnswer) {
     bool correctAnswer = quizBrain.getQuestionAnswer();
 
-    if (userPickedAnswer == correctAnswer) {
-      print('user got it right');
-    } else {
-      print('user got it wrong.');
-    }
     setState(() {
-      quizBrain.nextQuestion();
+      if (quizBrain.isFinished()) {
+        Alert(
+          context: context,
+          type: AlertType.success,
+          title: "Thanks",
+          desc: "Questions are completed!!!\nYou score is $totalRightAnswer",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "Finished",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              width: 120,
+            )
+          ],
+        ).show();
+
+        scoreKeeper = [];
+        quizBrain.reset();
+        totalRightAnswer = 0;
+      } else {
+        if (userPickedAnswer == correctAnswer) {
+          scoreKeeper.add(Icon(
+            Icons.check,
+            color: Colors.green,
+          ));
+          totalRightAnswer++;
+          print('user got it right');
+        } else {
+          scoreKeeper.add(Icon(
+            Icons.close,
+            color: Colors.red,
+          ));
+          print('user got it wrong.');
+        }
+        quizBrain.nextQuestion();
+      }
     });
   }
 
