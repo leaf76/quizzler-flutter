@@ -1,10 +1,10 @@
-#Practice app on Flutter
+# Practice app on Flutter
 
 --------------------------------
 quizzler
 
 * Skills:
- * Flutter
- * Dart
+    * Flutter
+    * Dart
 * Packages:
- * rflutter_alert
+    * rflutter_alert
